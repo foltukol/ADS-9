@@ -8,93 +8,81 @@
 #include <algorithm>
 #include  "tree.h"
 
-void PermutationGenerator::buildTreeStructure(TreeNode* node, const std::vector<char>& elements) {
-    if (elements.empty()) {
-      return;
-    }
+void PMTree::buildTree(Node* node, const std::vector<char>& elements) {
+    if (elements.empty()) return;
     for (size_t i = 0; i < elements.size(); ++i) {
-      TreeNode* child = new TreeNode(elements[i]);
-      node->children.push_back(child);
-      std::vector<char> remaining = elements;
-      remaining.erase(remaining.begin() + i);
-      buildTreeStructure(child, remaining);
+        Node* child = new Node(elements[i]);
+        node->children.push_back(child);
+        std::vector<char> remaining = elements;
+        remaining.erase(remaining.begin() + i);
+        buildTree(child, remaining);
     }
 }
-void PermutationGenerator::collectPermutations(TreeNode* node, std::vector<std::string>& results, std::string& current) const {
-    if (!node) {
-      return;
-    }
-    if (node->value != '\0') {
-      current.push_back(node->value);
+void PMTree::collectPermutations(Node* node, std::vector<std::vector<char>>& results, std::vector<char>& current) const {
+    if (!node) return;
+    if (node->data != '\0') {
+        current.push_back(node->data);
     }
     if (node->children.empty()) {
-      results.push_back(current);
+        results.push_back(current);
     } else {
-      for (TreeNode* child : node->children) {
-        collectPermutations(child, results, current);
-      }
+        for (Node* child : node->children) {
+            collectPermutations(child, results, current);
+        }
     }
     if (!current.empty()) {
-      current.pop_back();
+        current.pop_back();
     }
 }
-void PermutationGenerator::findPermutationByIndex(TreeNode* node, std::string& result, int index) const {
-  if (!node || node->children.empty()) {
-    return;
-  }
-  int count = node->children.size();
-  int fact = calculateFactorial(count - 1);
-  int childIndex = index / fact;
-  if (childIndex >= count) {
-    return;
-  }
-  TreeNode* selected = node->children[childIndex];
-  result.push_back(selected->value);
-  findPermutationByIndex(selected, result, index % fact);
+void PMTree::findPermByIndex(Node* node, std::vector<char>& result, int index) const {
+    if (!node || node->children.empty()) return;
+    int count = node->children.size();
+    int fact = factorial(count - 1);
+    int childIndex = index / fact;
+    if (childIndex >= count) return;
+    Node* selected = node->children[childIndex];
+    result.push_back(selected->data);
+    findPermByIndex(selected, result, index % fact);
 }
-void PermutationGenerator::cleanupTree(TreeNode* node) {
-  if (!node) {
-  return;
-  }
-  for (TreeNode* child : node->children) {
-    cleanupTree(child);
-  }
-  delete node;
+void PMTree::deleteSubtree(Node* node) {
+    if (!node) return;
+    for (Node* child : node->children) {
+        deleteSubtree(child);
+    }
+    delete node;
 }
-int PermutationGenerator::calculateFactorial(int n) const {
-  return (n <= 1) ? 1 : n * calculateFactorial(n - 1);
+int PMTree::factorial(int n) const {
+    return (n <= 1) ? 1 : n * factorial(n - 1);
 }
-PermutationGenerator::PermutationGenerator(const std::vector<char>& elements) {
-  root = new TreeNode('\0');
-  buildTreeStructure(root, elements);
+PMTree::PMTree(const std::vector<char>& elements) {
+    root = new Node('\0');
+    buildTree(root, elements);
 }
-PermutationGenerator::~PermutationGenerator() {
-  cleanupTree(root);
+PMTree::~PMTree() {
+    deleteSubtree(root);
 }
-void PermutationGenerator::getAllPermutations(std::vector<std::string>& results) const {
-  std::string current;
-  collectPermutations(root, results, current);
+void PMTree::generateAll(std::vector<std::vector<char>>& results) {
+    std::vector<char> current;
+    collectPermutations(root, results, current);
 }
-void PermutationGenerator::getPermutationByIndex(std::string& result, int index) const {
-  if (index <= 0) {
-    return;
-  }
-  findPermutationByIndex(root, result, index - 1);
+void PMTree::getByIndex(std::vector<char>& result, int index) {
+    if (index <= 0) return;
+    findPermByIndex(root, result, index - 1);
 }
-std::vector<std::string> generateAllPermutations(PermutationGenerator& generator) {
-  std::vector<std::string> results;
-  generator.getAllPermutations(results);
-  return results;
+std::vector<std::vector<char>> getAllPerms(PMTree& tree) {
+    std::vector<std::vector<char>> results;
+    tree.generateAll(results);
+    return results;
 }
-std::string getPermutationMethod1(PermutationGenerator& generator, int index) {
-  auto allPerms = generateAllPermutations(generator);
-  if (index > 0 && index <= allPerms.size()) {
-    return allPerms[index - 1];
-  }
-  return "";
+std::vector<char> getPerm1(PMTree& tree, int index) {
+    auto allPerms = getAllPerms(tree);
+    if (index > 0 && static_cast<size_t>(index) <= allPerms.size()) {
+        return allPerms[index - 1];
+    }
+    return {};
 }
-std::string getPermutationMethod2(PermutationGenerator& generator, int index) {
-  std::string result;
-  generator.getPermutationByIndex(result, index);
-  return result;
+std::vector<char> getPerm2(PMTree& tree, int index) {
+    std::vector<char> result;
+    tree.getByIndex(result, index);
+    return result;
 }
