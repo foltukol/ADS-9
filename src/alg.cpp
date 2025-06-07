@@ -34,7 +34,7 @@ void PMTree::collectPermutations(Node* node,
         current.pop_back();
     }
 }
-void PMTree::findPermByIndex(Node* node, 
+void PMTree::findPermByIndex(Node* node,
     std::vector<char>& result, int index) const {
     if (!node || node->children.empty()) return;
     int count = node->children.size();
