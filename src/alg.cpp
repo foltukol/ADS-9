@@ -62,11 +62,11 @@ PMTree::PMTree(const std::vector<char>& elements) {
 PMTree::~PMTree() {
     deleteSubtree(root);
 }
-void PMTree::generateAll(std::vector<std::vector<char>>& results) {
+void PMTree::generateAll(std::vector<std::vector<char>>& results) const {
     std::vector<char> current;
     collectPermutations(root, results, current);
 }
-void PMTree::getByIndex(std::vector<char>& result, int index) {
+void PMTree::getByIndex(std::vector<char>& result, int index) const {
     if (index <= 0) return;
     findPermByIndex(root, result, index - 1);
 }
