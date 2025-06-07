@@ -8,7 +8,7 @@ class PMTree {
   struct Node {
     char data;
     std::vector<Node*> children;
-    explicit Node(char в) : data(d) {}
+    explicit Node(char d) : data(d) {}
   };
   Node* root = nullptr;
   void buildTree(Node* node, const std::vector<char>& elements);
@@ -20,7 +20,7 @@ class PMTree {
  public:
   explicit PMTree(const std::vector<char>& elements);
   ~PMTree();
-  void getAll(std::vector<std::vector<char>>& results) const;
+  void generateAll(std::vector<std::vector<char>>& results) const;
   void getByIndex(std::vector<char>& result, int index) const;
 };
 std::vector<std::vector<char>> getAllPerms(PMTree& tree);
