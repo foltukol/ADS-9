@@ -8,11 +8,12 @@ class PMTree {
   struct Node {
     char data;
     std::vector<Node*> children;
-    Node(char в) : data(d) {}
+    explicit Node(char в) : data(d) {}
   };
   Node* root = nullptr;
   void buildTree(Node* node, const std::vector<char>& elements);
-  void collectPermutations(Node* node, std::vector<std::vector<char>>& results, std::vector<char>& current) const;
+  void collectPermutations(Node* node, std::vector<std::vector<char>>& results, 
+    std::vector<char>& current) const;
   void findPermByIndex(Node* node, std::vector<char>& result, int index) const;
   void deleteSubtree(Node* node);
   int factorial(int n) const;
