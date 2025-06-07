@@ -3,7 +3,6 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
-#include <iostream>
 #include <vector>
 #include <algorithm>
 #include  "tree.h"
@@ -18,7 +17,8 @@ void PMTree::buildTree(Node* node, const std::vector<char>& elements) {
         buildTree(child, remaining);
     }
 }
-void PMTree::collectPermutations(Node* node, std::vector<std::vector<char>>& results, std::vector<char>& current) const {
+void PMTree::collectPermutations(Node* node,
+    std::vector<std::vector<char>>& results, std::vector<char>& current) const {
     if (!node) return;
     if (node->data != '\0') {
         current.push_back(node->data);
@@ -34,7 +34,8 @@ void PMTree::collectPermutations(Node* node, std::vector<std::vector<char>>& res
         current.pop_back();
     }
 }
-void PMTree::findPermByIndex(Node* node, std::vector<char>& result, int index) const {
+void PMTree::findPermByIndex(Node* node, 
+    std::vector<char>& result, int index) const {
     if (!node || node->children.empty()) return;
     int count = node->children.size();
     int fact = factorial(count - 1);
