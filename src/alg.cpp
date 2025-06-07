@@ -5,6 +5,7 @@
 #include  <cstdlib>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include  "tree.h"
 
 void PermutationGenerator::buildTreeStructure(TreeNode* node, const std::vector<char>& elements) {
