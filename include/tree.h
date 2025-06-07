@@ -3,29 +3,27 @@
 #define INCLUDE_TREE_H_
 
 #include <vector>
-#include <string>
 
-class PermutationGenerator {
-  struct TreeNode {
-    char value;
-    std::vector<TreeNode*> children;
-    TreeNode(char val) : value(val) {}
+class PMTree {
+  struct Node {
+    char data;
+    std::vector<Node*> children;
+    Node(char в) : data(d) {}
   };
-  TreeNode* root = nullptr;
-  void buildTreeStructure(TreeNode* node, const std::vector<char>& elements);
-  void collectPermutations(TreeNode* node, std::vector<std::string>& results, std::string& current) const;
-  void findPermutationByIndex(TreeNode* node, std::string& result, int index) const;
-  void cleanupTree(TreeNode* node);
-  int calculateFactorial(int n) const;
+  Node* root = nullptr;
+  void buildTree(Node* node, const std::vector<char>& elements);
+  void collectPermutations(Node* node, std::vector<std::string>& results, std::string& current) const;
+  void findPermByIndex(Node* node, std::vector<char>& result, int index) const;
+  void deleteSubtree(Node* node);
+  int factorial(int n) const;
  public:
-  explicit PermutationGenerator(const std::vector<char>& elements);
-  ~PermutationGenerator();
-  void initialize();
-  void getAllPermutations(std::vector<std::string>& results) const;
-  void getPermutationByIndex(std::string& result, int index) const;
+  explicit PMTree(const std::vector<char>& elements);
+  ~PMTree();
+  void getAll(std::vector<std::vector<char>>& results) const;
+  void getByIndex(std::vector<char>& result, int index) const;
 };
-std::vector<std::string> generateAllPermutations(PermutationGenerator& generator);
-std::string getPermutationMethod1(PermutationGenerator& generator, int index);
-std::string getPermutationMethod2(PermutationGenerator& generator, int index);
+std::vector<std::vector<char>> getAllPerms(PMTree& tree);
+std::vector<char> getPerm1(PMTree& tree, int n);
+std::vector<char> getPerm2(PMTree& tree, int n);
 
 #endif  // INCLUDE_TREE_H_
